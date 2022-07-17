@@ -149,7 +149,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        <span>Copyright &copy; thecodedot</span>
                     </div>
                 </div>
             </footer>
@@ -175,6 +175,18 @@
     <script src="{{ asset('js/sb-admin.min.js') }}"></script>
     @stack('modals')
     @livewireScripts
+
+    <script>
+        window.addEventListener('closeModal', event => {
+            $('#exampleModal').modal('hide');
+        });
+    </script>
+
+    <script>
+        window.addEventListener('showModal', event => {
+            $('#exampleModal').modal('show');
+        });
+    </script>
 
 </body>
 
