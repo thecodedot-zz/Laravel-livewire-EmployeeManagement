@@ -4,10 +4,13 @@ namespace App\Http\Livewire\Users;
 
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Illuminate\Support\Facades\Hash;
 
 class UserIndex extends Component
 {
+    use WithPagination;
+
     public $search = '';
     public $username, $firstName, $lastName, $email, $password;
     public $userId;
@@ -32,10 +35,21 @@ class UserIndex extends Component
             'password' => Hash::make($this->password)
         ]);
         $this->reset();
-        $this->dispatchBrowserEvent('closeModal');
-        session()->flash('message', 'User successfully addedg');
+        $this->dispatchBrowserEvent('modal', [
+            'modalId' => '#userModal',
+            'actionModal' => 'hide'
+        ]);
+        session()->flash('message', 'User successfully added.');
 
 
+    }
+
+    public function showUserModal() {
+        $this->reset();
+        $this->dispatchBrowserEvent('modal', [
+            'modalId' => '#userModal',
+            'actionModal' => 'show'
+        ]);
     }
 
     public function showEditModal($id) {
@@ -46,9 +60,13 @@ class UserIndex extends Component
         // load user
         $this->loadUser();
         // show Modal
-        $this->dispatchBrowserEvent('showModal');
-
+        $this->dispatchBrowserEvent('modal', [
+            'modalId' => '#userModal',
+            'actionModal' => 'show'
+        ]);
     }
+
+
 
     public function loadUser() {
         $user = User::find($this->userId);
@@ -68,28 +86,33 @@ class UserIndex extends Component
         $user = User::find($this->userId);
         $user->update($validated);
         $this->reset();
-        $this->dispatchBrowserEvent('closeModal');
-        session()->flash('message', 'User successfully updated');
-
+        $this->dispatchBrowserEvent('modal', [
+            'modalId' => '#userModal',
+            'actionModal' => 'hide'
+        ]);
+        session()->flash('message', 'User successfully updated.');
     }
 
     public function deleteUser($id) {
         $user = User::find($id);
         $user->delete();
 
-        session()->flash('message', 'User successfully deleted');
+        session()->flash('message', 'User successfully deleted.');
     }
 
     public function closeModal() {
-        $this->dispatchBrowserEvent('closeModal');
+        $this->dispatchBrowserEvent('modal', [
+            'modalId' => '#userModal',
+            'actionModal' => 'hide'
+        ]);
         $this->reset();
     }
 
     public function render()
     {
-        $users = User::all();
+        $users = User::paginate(5);
         if(strlen($this->search) > 2) {
-            $users = User::where('username', 'like', "%{$this->search}%")->get();
+            $users = User::where('username', 'like', "%{$this->search}%")->paginate(5);
         }
         return view('livewire.users.user-index', [
             'users' => $users
