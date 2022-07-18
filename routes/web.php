@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Livewire\City\CityIndex;
 use App\Http\Livewire\Country\CountryIndex;
+use App\Http\Livewire\Department\DepartmentIndex;
+use App\Http\Livewire\Employee\EmployeeIndex;
+use App\Http\Livewire\State\StateIndex;
 use App\Http\Livewire\users\UserIndex;
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +31,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::get('/users', UserIndex::class)->name('users.index');
     Route::get('/countries', CountryIndex::class)->name('countries.index');
+    Route::get('/states', StateIndex::class)->name('states.index');
+    Route::get('/cities', CityIndex::class)->name('city.index');
+    Route::get('/department', DepartmentIndex::class)->name('department.index');
+    Route::get('/employees', EmployeeIndex::class)->name('employee.index');
+
 
 });

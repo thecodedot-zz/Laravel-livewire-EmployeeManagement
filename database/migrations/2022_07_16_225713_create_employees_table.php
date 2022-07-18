@@ -26,8 +26,6 @@ class CreateEmployeesTable extends Migration
             $table->char('zip_code');
             $table->date('birthdate')->nullable();
             $table->date('date_hired')->nullable();
-
-
             $table->timestamps();
         });
     }

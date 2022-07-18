@@ -1,7 +1,7 @@
 <div>
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Countries</h1>
+        <h1 class="h3 mb-0 text-gray-800">States</h1>
     </div>
     <div class="row">
         <div class="card  mx-auto">
@@ -30,8 +30,8 @@
                         </form>
                     </div>
                     <div>
-                        <button wire:click="showCountryModal" class="btn btn-primary">
-                            New Country
+                        <button wire:click="showStateModal" class="btn btn-primary">
+                            New State
                         </button>
                     </div>
                 </div>
@@ -41,21 +41,21 @@
                     <thead>
                     <tr>
                         <th scope="col">#Id</th>
-                        <th scope="col">Country Code</th>
-                        <th scope="col">Country Name</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">State Name</th>
                         <th scope="col">Manage</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse ($countries as $country)
+                    @forelse ($states as $state)
                         <tr>
-                            <th scope="row">{{ $country->id }}</th>
-                            <td>{{ $country->country_code }}</td>
-                            <td>{{ $country->name }}</td>
+                            <th scope="row">{{ $state->id }}</th>
+                            <td>{{ $state->country->name }}</td>
+                            <td>{{ $state->name }}</td>
                             <td>
-                                <button wire:click="showEditModal({{ $country->id }})"
+                                <button wire:click="showEditModal({{ $state->id }})"
                                         class="btn btn-success">Edit</button>
-                                <button wire:click="deleteCountry({{ $country->id }})"
+                                <button wire:click="deleteState({{ $state->id }})"
                                         class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
@@ -68,18 +68,18 @@
                 </table>
             </div>
             <div>
-                {{ $countries->links('pagination::bootstrap-4') }}
+                {{ $states->links('pagination::bootstrap-4') }}
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="countryModal" tabindex="-1" aria-labelledby="countryModalLabel" aria-hidden="true">
+        <div class="modal fade" id="stateModal" tabindex="-1" aria-labelledby="stateModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         @if ($editMode)
-                            <h5 class="modal-title" id="countryModalLabel">Edit Country</h5>
+                            <h5 class="modal-title" id="stateModalLabel">Edit State</h5>
                         @else
-                            <h5 class="modal-title" id="countryModalLabel">Add Country</h5>
+                            <h5 class="modal-title" id="stateModalLabel">Add State</h5>
 
                         @endif
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -89,15 +89,18 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group row">
-                                <label for="countryCode"
+                                <label for="countryId"
                                        class="col-md-4 col-form-label text-md-right">{{ __('Country Code') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="countryCode" type="text"
-                                           class="form-control @error('countryCode') is-invalid @enderror"
-                                           wire:model.defer="countryCode">
+                                    <select wire:model.defer="countryId" class="custom-select">
+                                        <option selected>Choose</option>
 
-                                    @error('countryCode')
+                                        @foreach (App\Models\Country::all() as $country)
+                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('countryId')
                                     <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -127,11 +130,11 @@
                     <div class="modal-footer">
                         <button class="btn btn-secondary" wire:click="closeModal">Close</button>
                         @if ($editMode)
-                            <button class="btn btn-primary" wire:click="updateCountry">Update
-                                country</button>
+                            <button class="btn btn-primary" wire:click="updateState">Update
+                                State</button>
                         @else
-                            <button class="btn btn-primary" wire:click="addCountry">Add
-                                country</button>
+                            <button class="btn btn-primary" wire:click="addState">Add
+                                State</button>
                         @endif
                     </div>
                 </div>

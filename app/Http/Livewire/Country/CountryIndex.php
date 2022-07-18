@@ -22,11 +22,11 @@ class CountryIndex extends Component
 
     public function showEditModal($id) {
         $this->reset();
-        $this->editMode = true;
         $this->countryId = $id;
         $this->loadCountries();
+        $this->editMode = true;
         $this->dispatchBrowserEvent('modal', [
-            'modalId' => '#userModal',
+            'modalId' => '#countryModal',
             'actionModal' => 'show'
         ]);
     }
